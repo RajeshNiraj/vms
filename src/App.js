@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import HomePage from './pages/homepage/homepage-component';
 import ShopPage from "./pages/ShopPage/shoppage-component";
+import Header from "./components/header/header-component";
 
 //with react router 6 Switch does not exist anymore
 //now it becomes Routes, then you need to import Routes
@@ -63,7 +64,8 @@ import ShopPage from "./pages/ShopPage/shoppage-component";
 
 function App() {
   return (
-    <div>   
+    <div> 
+      <Header/>  
       <Routes> 
           <Route path="/" element={<HomePage/>} /> 
           <Route path="/shop" element={<ShopPage/>} /> 
