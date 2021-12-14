@@ -1,77 +1,56 @@
 import React from "react";
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
+import { connect } from "react-redux";
 import './App.css';
 import HomePage from './pages/homepage/homepage-component';
 import ShopPage from "./pages/ShopPage/shoppage-component";
+import SignInSignOut from "./pages/sign-in/sign-in-Sign-out-component";
+import { auth } from "./firebase/firebase-utils"
 import Header from "./components/header/header-component";
 
-//with react router 6 Switch does not exist anymore
-//now it becomes Routes, then you need to import Routes
-//importing BrowserRouter has not changed
-//in v6 we add a element instead of component since now
-//it is not a child of route. for exaaple :- 
-//<Route exact path="/" element={<HomePage/>} /> 
-//it will pass the jsx element.
-//with version 6 the 'exact' prop is gone.
-//it will now look for exact matches if we defin the paths
-//the order of routes also does not match any more in v6.
-//{useParams} to get the parameter in v5. the code is same for v6.
-//instead of 'Redirect' , its 'Navigate' in v6.
-//we should use as element tag as:-
-//element={<Navigate to="/welcome"/>} instead of using as a child //as in v5.
-//'Navigate replace => if we want to 'Redirect' full as in v5.
-//add <Route path="/welcome/*" if we nned to display nested routes
-// as in /welcome/new-user also gets loaded. the paths of the 
-//nested routes we dont need to add /welcome/new-user and we 
-//need to have only the extra pathe that is "new-user" becasue
-//it is relative to the parent . even if you had the Link it will
-//also be relative and it will be <Link to="new-user"/>
-//we can also define nested routes in the parent as
-//        <Routes> 
-//          <Route path="/welcome/*" element={<HomePage/>}>
-//               <Route path="new-user" element={<p>Hello</p>}/>
-//          </Route>
-//          <Route path="/hats" element={<HatsPage/>} /> 
-//        </Routes>  
+import { setCurrentUser } from "./redux/user/user-actions";
 
-// to know the child where the nested paragraph should be insered
-//in v6 we have 'Outlet' as below 
-//import {Link, Outlet} from 'react-router-dom'
-// const Welcome = () => {
-//   const navigate = useNavigate();
-//     return (
-//       <Section>
-//          <h1>The Welocme Page</h1>
-//         <Link to="new-user">Home Page</Link>
-//          <Outlet />
-//       </Section> 
-//     ) 
-// };
+class App extends React.Component {
 
-//in v6 instead of useHistory we have useNavigate hook
-//const navigate = useNavigate();
+  unsubscribeFromAuth = null;
 
-//if v5 we have prompt if we accidently leave the page if 
-//we have changes.
-//in v6
+  componentDidMount(){
+      const { setCurrentUser } = this.props;
+      this.unsubscribeFromAuth =  auth.onAuthStateChanged(user => {
+      setCurrentUser(user);
+      //console.log(user);
+    })
+  }
 
-// const HatsPage = () => (
-//     <div>
-//       <h1>HATS PAGE</h1>
-//     </div> 
-// ); 
+  componentWillUnmount(){
+    this.unsubscribeFromAuth();
+  }
 
-
-function App() {
-  return (
-    <div> 
-      <Header/>  
-      <Routes> 
-          <Route path="/" element={<HomePage/>} /> 
-          <Route path="/shop" element={<ShopPage/>} /> 
-      </Routes>     
-    </div>
-  );
+  render(){
+    return (
+      <div> 
+        <Header />  
+        <Routes> 
+            <Route path="/" element={<HomePage/>} /> 
+            <Route path="/shop" element={<ShopPage/>} /> 
+             <Route path="/signin" element={ 
+              this.props.currentUser ? (
+                <Navigate to ="/" />) : 
+                  (<SignInSignOut/>)}  /> 
+            {/* //<Route path="/signin" element={<SignInSignOut/>} />  */}
+        </Routes>     
+      </div>
+    );
+  };
 }
 
-export default App;
+//to get the current state 
+const mapStateToProps = ({ user }) => ({
+  currentUser : user.currentUser
+})
+
+const mapDispatchProps = dispatch => ({
+  setCurrentUser: user => dispatch(setCurrentUser(user ))
+})
+
+export default connect(mapStateToProps,mapDispatchProps)(App);

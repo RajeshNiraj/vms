@@ -1,0 +1,125 @@
+//Redux : -
+
+//REducers are the fundamental part of the redux because they are 
+//essentialy what our states are represented by. 
+//home reducer for example is just an object which hold data related
+//to home.  home reducer, shop m, user reducer all compose the
+//root reducer.
+//every reducer is just a function
+
+//Provider from redux is a component that we wrap around the entire 
+//application. it allows us to get access everything related to the 
+//store. 
+
+//now we have the provider we need to write the store intself.
+//
+
+//to get the reducer into the componet , say header component
+//we need to import { connect } from 'react-redux'
+//connect is a higher order component that lets us modify
+//our componet rlated to redux.
+//higher order componet are just functions that take components
+//as arguments and return us a new scooped up compnnet.
+
+connect has 2 parameter . firtst argument will ne the fnction that allows
+us to access the state with the state being our root reducer.
+
+root reducer is an object that has property of user(example) that points to the user reducer.
+
+the first argument of connect is mapStateToProps
+the secon argument of connect is 
+
+the second argument of connect   is mapDispatchToProps
+
+
+
+//===============================
+
+
+//!) Decide on the components
+//2) Decide the state and where it lives
+//3) What changes when state change.
+
+//to update react to the latest version :-
+//first clone the project from the git -> git clone and the https link to 
+//our project in github.
+//remove the lock file -> rm -rf  yarn.lock
+//run npm update -D (update all of the existing dependencies)
+//if vulnerabilits is there then run npm audit fix
+//then run npm install
+//run npm audit to check if there are any more vulanabilities
+//then finally start npm start.
+//
+
+//Yarn commands:-
+  //yarn add nodes-sass
+  // delete yarn lock -> rm -rf yarn-lock
+  // rm -f node_modules (we will do this if we install some component that 
+  //is differnet from the version in packagae.json)
+  //then run -->  "yarn" to install all of our new packages all over again
+ // yarn start - to start the project
+ 
+ //if we want the same version if there is a verson covnflict and if it
+ //is a minor version conflict then we can add in the package.json file
+ //"resolutions" : {
+  //  "babel-jest" : "24.7.1"
+ //} after that run yarn to reinstall the dependencies.
+ //yarn start
+
+
+//=============================
+//with react router 6 Switch does not exist anymore
+//now it becomes Routes, then you need to import Routes
+//importing BrowserRouter has not changed
+//in v6 we add a element instead of component since now
+//it is not a child of route. for exaaple :- 
+//<Route exact path="/" element={<HomePage/>} /> 
+//it will pass the jsx element.
+//with version 6 the 'exact' prop is gone.
+//it will now look for exact matches if we defin the paths
+//the order of routes also does not match any more in v6.
+//{useParams} to get the parameter in v5. the code is same for v6.
+//instead of 'Redirect' , its 'Navigate' in v6.
+//we should use as element tag as:-
+//element={<Navigate to="/welcome"/>} instead of using as a child //as in v5.
+//'Navigate replace => if we want to 'Redirect' full as in v5.
+//add <Route path="/welcome/*" if we nned to display nested routes
+// as in /welcome/new-user also gets loaded. the paths of the 
+//nested routes we dont need to add /welcome/new-user and we 
+//need to have only the extra pathe that is "new-user" becasue
+//it is relative to the parent . even if you had the Link it will
+//also be relative and it will be <Link to="new-user"/>
+//we can also define nested routes in the parent as
+//        <Routes> 
+//          <Route path="/welcome/*" element={<HomePage/>}>
+//               <Route path="new-user" element={<p>Hello</p>}/>
+//          </Route>
+//          <Route path="/hats" element={<HatsPage/>} /> 
+//        </Routes>  
+
+// to know the child where the nested paragraph should be insered
+//in v6 we have 'Outlet' as below 
+//import {Link, Outlet} from 'react-router-dom'
+// const Welcome = () => {
+//   const navigate = useNavigate();
+//     return (
+//       <Section>
+//          <h1>The Welocme Page</h1>
+//         <Link to="new-user">Home Page</Link>
+//          <Outlet />
+//       </Section> 
+//     ) 
+// };
+
+//in v6 instead of useHistory we have useNavigate hook
+//const navigate = useNavigate();
+
+//if v5 we have prompt if we accidently leave the page if 
+//we have changes.
+//in v6
+
+// const HatsPage = () => (
+//     <div>
+//       <h1>HATS PAGE</h1>
+//     </div> 
+// ); 
